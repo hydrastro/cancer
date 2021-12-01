@@ -18,7 +18,7 @@
 use std::ptr;
 use std::cell::Cell;
 
-use libc::{c_uchar, c_int};
+use libc::{c_int};
 use crate::ffi::cairo::*;
 
 #[derive(Eq, PartialEq, Clone, Debug)]

@@ -17,7 +17,6 @@
 
 use std::mem;
 
-use libc::c_int;
 use crate::ffi::cairo::*;
 use crate::ffi::pango::*;
 use crate::sys::pango;
@@ -127,7 +126,7 @@ impl Context {
 
 	pub fn image(&mut self, image: &Image, x: f64, y: f64) {
 		unsafe {
-			let mut matrix  = mem::uninitialized();
+			let mut matrix  = mem::MaybeUninit::uninit().assume_init();
 			cairo_matrix_init_translate(&mut matrix, -x, -y);
 
 			let pattern = image.pattern();

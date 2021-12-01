@@ -224,7 +224,6 @@ impl Write for Tty {
 unsafe fn execute(term: Option<&str>, program: Option<&str>) -> ! {
 	use std::env;
 	use std::ffi::{CString, CStr};
-	use shlex;
 
 	let passwd  = getpwuid(getuid()).as_mut().expect("no user?");
 	let program = if let Some(program) = program {

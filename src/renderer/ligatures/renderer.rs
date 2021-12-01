@@ -36,7 +36,7 @@ use picto::Region;
 use crate::sys::cairo;
 use crate::interface::Interface;
 use crate::renderer::State;
-use crate::renderer::option::{self, Options};
+use crate::renderer::option::{Options};
 
 /// Renderer for a `cairo::Surface`.
 pub struct Renderer {

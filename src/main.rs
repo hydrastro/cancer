@@ -25,7 +25,7 @@
 #[cfg(feature = "fuzzy")]
 extern crate afl;
 
-#[macro_use(error, debug, log)]
+#[macro_use(error, debug)]
 extern crate log;
 extern crate env_logger;
 

@@ -129,7 +129,7 @@ pub mod platform {
 
 impl fmt::Display for Error {
 	fn fmt(&self, f: &mut fmt::Formatter) -> ::std::result::Result<(), fmt::Error> {
-		f.write_str(error::Error::description(self))
+		f.write_str(&self.to_string())
 	}
 }
 
@@ -137,16 +137,16 @@ impl error::Error for Error {
 	fn description(&self) -> &str {
 		match *self {
 			Error::Io(ref err) =>
-				err.description(),
+				&err.to_string(),
 
 			Error::Nul(ref err) =>
-				err.description(),
+				&err.to_string(),
 
 			Error::Message(ref msg) =>
 				msg.as_ref(),
 
 			Error::Directory(ref err) =>
-				err.description(),
+				&err.to_string(),
 
 			Error::Unknown =>
 				"Unknown error.",

@@ -287,7 +287,7 @@ impl Grid {
 	pub fn down(&mut self, n: u32, region: Option<(u32, u32)>) {
 		if let Some(region) = region {
 			let y = region.0;
-			let n = clamp(n as u32, 0, (region.1 - y + 1));
+			let n = clamp(n as u32, 0, region.1 - y + 1);
 
 			// Split the cells at the current line.
 			let mut rest = self.view.split_off(y as usize);
