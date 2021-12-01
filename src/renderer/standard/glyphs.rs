@@ -22,9 +22,9 @@ use lru::LruCache;
 use std::hash::BuildHasherDefault;
 use fnv::FnvHasher;
 
-use sys::pango;
-use font::Font;
-use style;
+use crate::sys::pango;
+use crate::font::Font;
+use crate::style;
 
 /// Computed glyph cache.
 ///

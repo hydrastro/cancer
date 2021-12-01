@@ -17,8 +17,8 @@
 
 use std::ptr;
 
-use ffi::pango::*;
-use ffi::glib::*;
+use crate::ffi::pango::*;
+use crate::ffi::glib::*;
 
 use super::{Description, Map, Set, Font};
 

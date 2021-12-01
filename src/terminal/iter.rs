@@ -20,7 +20,7 @@ use std::collections::HashSet;
 use std::hash::BuildHasherDefault;
 use fnv::FnvHasher;
 
-use terminal::cell::{self, Cell};
+use crate::terminal::cell::{self, Cell};
 
 pub struct Iter<'a, A, I>
 	where A: Index<(u32, u32), Output = Cell> + 'a,

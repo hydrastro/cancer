@@ -23,14 +23,16 @@ use std::collections::HashMap;
 use xcb;
 use xcbu::{icccm, ewmh};
 
-use error;
-use config::Config;
-use font::Font;
-use platform::{Event, Clipboard};
-use platform::key;
-use platform::mouse::{self, Mouse};
-use platform::x11::{Keyboard, Proxy};
+use crate::error;
+use crate::config::Config;
+use crate::font::Font;
+use crate::platform::{Event, Clipboard};
+use crate::platform::key;
+use crate::platform::mouse::{self, Mouse};
+use crate::platform::x11::{Keyboard, Proxy};
 use picto::Region;
+
+use futures::select;
 
 /// X11 window.
 pub struct Window {
@@ -141,14 +143,14 @@ impl Window {
 	}
 
 	#[allow(non_snake_case)]
-	pub fn run(&mut self, manager: Sender<Event>) -> error::Result<()> {
+	pub async fn run(&mut self, manager: Sender<Event>) -> error::Result<()> {
 		fn sink(connection: Arc<ewmh::Connection>) -> Receiver<xcb::GenericEvent> {
 			let (sender, receiver) = sync_channel(16);
 
 			// Drain events into a channel.
 			thread::Builder::new().name("cancer::x11".into()).spawn(move || {
 				while let Some(event) = connection.wait_for_event() {
-					try!(return sender.send(event));
+					return sender.send(event)?;
 				}
 			}).unwrap();
 
@@ -170,7 +172,7 @@ impl Window {
 		loop {
 			select! {
 				request = requests.recv() => {
-					match try!(ok request) {
+					match r#try!(ok request) {
 						Request::Flush => {
 							self.connection.flush();
 						}
@@ -223,7 +225,7 @@ impl Window {
 				},
 
 				event = events.recv() => {
-					let event = try!(event);
+					let event = event?;
 
 					match event.response_type() {
 						xcb::EXPOSE => {
@@ -233,15 +235,15 @@ impl Window {
 							let w     = event.width() as u32;
 							let h     = event.height() as u32;
 
-							try!(manager.send(Event::Damaged(Region::from(x, y, w, h))));
+							manager.send(Event::Damaged(Region::from(x, y, w, h)))?;
 						}
 
 						xcb::MAP_NOTIFY | xcb::UNMAP_NOTIFY => {
-							try!(manager.send(Event::Show(event.response_type() == xcb::MAP_NOTIFY)));
+							manager.send(Event::Show(event.response_type() == xcb::MAP_NOTIFY))?;
 						}
 
 						xcb::FOCUS_IN | xcb::FOCUS_OUT => {
-							try!(manager.send(Event::Focus(event.response_type() == xcb::FOCUS_IN)));
+							manager.send(Event::Focus(event.response_type() == xcb::FOCUS_IN))?;
 						}
 
 						xcb::CONFIGURE_NOTIFY => {
@@ -249,15 +251,15 @@ impl Window {
 							let w     = event.width() as u32;
 							let h     = event.height() as u32;
 
-							try!(manager.send(Event::Resize(w, h)));
+							manager.send(Event::Resize(w, h))?;
 						}
 
 						xcb::REPARENT_NOTIFY => {
 							let event = unsafe { xcb::cast_event::<xcb::ReparentNotifyEvent>(&event) };
-							let reply = try!(continue xcb::get_geometry(&self.connection, event.parent()).get_reply());
+							let reply = r#try!(continue xcb::get_geometry(&self.connection, event.parent()).get_reply());
 
-							try!(manager.send(Event::Resize(reply.width() as u32, reply.height() as u32)));
-							try!(manager.send(Event::Redraw));
+							manager.send(Event::Resize(reply.width() as u32, reply.height() as u32))?;
+							manager.send(Event::Redraw)?;
 						}
 
 						xcb::SELECTION_CLEAR => {
@@ -267,7 +269,7 @@ impl Window {
 
 						xcb::SELECTION_REQUEST => {
 							let event = unsafe { xcb::cast_event::<xcb::SelectionRequestEvent>(&event) };
-							let reply = try!(continue xcb::get_atom_name(&self.connection, event.target()).get_reply());
+							let reply = r#try!(continue xcb::get_atom_name(&self.connection, event.target()).get_reply());
 
 							debug!(target: "cancer::platform::clipboard", "request clipboard: {:?}", reply.name());
 
@@ -311,11 +313,11 @@ impl Window {
 							let event = unsafe { xcb::cast_event::<xcb::PropertyNotifyEvent>(&event) };
 
 							if event.atom() == SELECTION {
-								let reply = try!(continue icccm::get_text_property(&self.connection, self.window, SELECTION).get_reply());
+								let reply = r#try!(continue icccm::get_text_property(&self.connection, self.window, SELECTION).get_reply());
 								xcb::delete_property(&self.connection, self.window, SELECTION);
 
 								if !reply.name().is_empty() {
-									try!(manager.send(Event::Paste(reply.name().as_bytes().to_vec())));
+									manager.send(Event::Paste(reply.name().as_bytes().to_vec()))?;
 								}
 							}
 						}
@@ -337,7 +339,7 @@ impl Window {
 								continue;
 							}
 
-							try!(manager.send(Event::Mouse(Mouse::Click(mouse::Click {
+							manager.send(Event::Mouse(Mouse::Click(mouse::Click {
 								press:    press,
 								button:   button,
 								modifier: key::Modifier::from(event.state()),
@@ -345,19 +347,19 @@ impl Window {
 									x: event.event_x() as u32,
 									y: event.event_y() as u32,
 								}
-							}))));
+							})))?;
 						}
 
 						xcb::MOTION_NOTIFY => {
 							let event = unsafe { xcb::cast_event::<xcb::MotionNotifyEvent>(&event) };
 
-							try!(manager.send(Event::Mouse(Mouse::Motion(mouse::Motion {
+							manager.send(Event::Mouse(Mouse::Motion(mouse::Motion {
 								modifier: key::Modifier::from(event.state()),
 								position: mouse::Position {
 									x: event.event_x() as u32,
 									y: event.event_y() as u32,
 								}
-							}))));
+							})))?;
 						}
 
 						e if self.keyboard.owns_event(e) => {
@@ -368,7 +370,7 @@ impl Window {
 							let event = unsafe { xcb::cast_event::<xcb::KeyPressEvent>(&event) };
 
 							if let Some(key) = self.keyboard.key(event.detail()) {
-								try!(manager.send(Event::Key(key)));
+								manager.send(Event::Key(key))?;
 							}
 						}
 

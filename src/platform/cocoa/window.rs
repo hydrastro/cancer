@@ -27,13 +27,13 @@ use cocoa::foundation::{NSAutoreleasePool, NSDate, NSDefaultRunLoopMode, NSPoint
 use cocoa::foundation::{NSString, NSUInteger};
 use cocoa::appkit::{self, NSApplication, NSApplicationActivationPolicy, NSEvent, NSWindow, NSView};
 
-use error;
-use config::Config;
-use font::Font;
-use platform::Event;
-use platform::cocoa::{Proxy, IdRef, Delegate};
-use platform::key::{self, Key};
-use platform::mouse::{self, Mouse};
+use crate::error;
+use crate::config::Config;
+use crate::font::Font;
+use crate::platform::Event;
+use crate::platform::cocoa::{Proxy, IdRef, Delegate};
+use crate::platform::key::{self, Key};
+use crate::platform::mouse::{self, Mouse};
 
 #[derive(Debug)]
 pub struct Window {

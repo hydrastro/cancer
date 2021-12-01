@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
-use platform::Clipboard;
+use crate::platform::Clipboard;
 
 pub enum Command {
 	None,
@@ -60,7 +60,7 @@ pub enum Previous {
 	Match(Match),
 }
 
-pub type Boundary = Box<Fn(&str) -> bool>;
+pub type Boundary = Box<dyn Fn(&str) -> bool>;
 
 pub enum Word {
 	Start(Boundary),

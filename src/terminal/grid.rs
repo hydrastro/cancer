@@ -20,8 +20,8 @@ use std::mem;
 use std::collections::VecDeque;
 
 use itertools::Itertools;
-use util::clamp;
-use terminal::{Cell, Row, Free};
+use crate::util::clamp;
+use crate::terminal::{Cell, Row, Free};
 
 #[derive(Debug)]
 pub struct Grid {

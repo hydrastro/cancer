@@ -19,7 +19,7 @@ use std::ptr;
 use std::cell::Cell;
 
 use libc::{c_uchar, c_int};
-use ffi::cairo::*;
+use crate::ffi::cairo::*;
 
 #[derive(Eq, PartialEq, Clone, Debug)]
 pub struct Image {

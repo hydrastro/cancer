@@ -18,6 +18,7 @@
 #![feature(mpsc_select, conservative_impl_trait, slice_patterns)]
 #![feature(trace_macros, type_ascription, inclusive_range_syntax)]
 #![feature(box_syntax, try_from)]
+#![feature(async_closure)]
 
 #![cfg_attr(feature = "fuzzy", feature(plugin))]
 #![cfg_attr(feature = "fuzzy", plugin(afl_plugin))]
@@ -38,6 +39,9 @@ extern crate shlex;
 extern crate schedule_recv as timer;
 extern crate picto;
 extern crate control_code as control;
+
+extern crate futures;
+use futures::select;
 
 extern crate unicode_segmentation;
 extern crate unicode_width;
@@ -221,7 +225,7 @@ fn main() {
 			});
 
 			(handle $what:expr) => ({
-				let (actions, touched) = try!(continue $what);
+				let (actions, touched) = r#try!(continue $what);
 
 				if touched.is_total() && batched.is_none() && config.environment().batch().is_some() {
 					batching = Some(true);
@@ -237,12 +241,12 @@ fn main() {
 						}
 
 						Action::Overlay(true) => {
-							interface = Overlay::new(try!(return interface.into_inner(tty.by_ref()))).into();
+							interface = Overlay::new(r#try!(return interface.into_inner(tty.by_ref()))).into();
 							render!(interface.region().absolute());
 						}
 
 						Action::Overlay(false) => {
-							interface = try!(return interface.into_inner(tty.by_ref())).into();
+							interface = r#try!(return interface.into_inner(tty.by_ref())).into();
 							render!(interface.region().absolute());
 						}
 
@@ -269,7 +273,7 @@ fn main() {
 					}
 				}
 
-				try!(return tty.flush());
+				r#try!(return tty.flush());
 			});
 
 			($iter:expr) => ({
@@ -282,7 +286,7 @@ fn main() {
 			});
 		}
 
-		thread::Builder::new().name("cancer::runner".into()).spawn(move || {
+		thread::Builder::new().name("cancer::runner".into()).spawn(async move || {
 			let _batcher = _batcher;
 
 			loop {
@@ -317,7 +321,7 @@ fn main() {
 					},
 
 					event = events.recv() => {
-						let event = try!(return event);
+						let event = r#try!(return event);
 						debug!(target: "cancer::runner", "{:?}", event);
 
 						match event {
@@ -347,7 +351,7 @@ fn main() {
 
 							Event::Focus(focus) => {
 								focused = focus;
-								try!(return interface.focus(focus, tty.by_ref()));
+								r#try!(return interface.focus(focus, tty.by_ref()));
 								render!(iter::empty());
 							}
 
@@ -357,7 +361,7 @@ fn main() {
 								}
 
 								if interface.overlay() {
-									interface = try!(return interface.into_inner(tty.by_ref())).into();
+									interface = r#try!(return interface.into_inner(tty.by_ref())).into();
 								}
 
 								surface = window.surface().unwrap();
@@ -367,14 +371,14 @@ fn main() {
 								let columns = renderer.columns();
 
 								if interface.columns() != columns || interface.rows() != rows {
-									try!(return tty.resize(columns, rows));
+									r#try!(return tty.resize(columns, rows));
 									interface.resize(columns, rows);
 								}
 							}
 
 							Event::Paste(value) => {
-								try!(return interface.paste(&value, tty.by_ref()));
-								try!(return tty.flush());
+								r#try!(return interface.paste(&value, tty.by_ref()));
+								r#try!(return tty.flush());
 							}
 
 							Event::Key(key) => {
@@ -401,7 +405,7 @@ fn main() {
 					},
 
 					input = input.recv() => {
-						render!(handle interface.input(&try!(return input), tty.by_ref()));
+						render!(handle interface.input(&r#try!(return input), tty.by_ref()));
 					}
 				}
 			}

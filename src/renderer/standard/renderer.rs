@@ -19,13 +19,13 @@ use std::mem;
 use std::rc::Rc;
 
 use picto::Region;
-use config::style::Shape;
-use sys::cairo;
-use style;
-use terminal::{cell, cursor};
-use interface::Interface;
-use renderer::{State, Options};
-use renderer::standard::{Cache, Glyphs};
+use crate::config::style::Shape;
+use crate::sys::cairo;
+use crate::style;
+use crate::terminal::{cell, cursor};
+use crate::interface::Interface;
+use crate::renderer::{State, Options};
+use crate::renderer::standard::{Cache, Glyphs};
 
 /// Renderer for a `cairo::Surface`.
 pub struct Renderer {

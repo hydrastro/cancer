@@ -21,8 +21,8 @@ use fnv::FnvHasher;
 use std::f32;
 
 use picto::color::{Rgba, Hsl, RgbHue};
-use control::DEC::SIXEL;
-use sys::cairo;
+use crate::control::DEC::SIXEL;
+use crate::sys::cairo;
 
 #[derive(Debug)]
 pub struct Sixel {

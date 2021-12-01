@@ -17,10 +17,10 @@
 
 use std::sync::Arc;
 
-use util::clamp;
+use crate::util::clamp;
 use picto::Region;
-use config::Config;
-use font::Font;
+use crate::config::Config;
+use crate::font::Font;
 
 #[derive(Clone, Debug)]
 pub struct State {

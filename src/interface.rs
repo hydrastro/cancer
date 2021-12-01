@@ -20,12 +20,12 @@ use std::io::Write;
 use std::vec;
 
 use picto::Region;
-use error;
-use config::Config;
-use platform::{Clipboard, Key, Mouse};
-use terminal::{Terminal, Mode, Iter, Cell};
-use terminal::{cursor, touched};
-use overlay::Overlay;
+use crate::error;
+use crate::config::Config;
+use crate::platform::{Clipboard, Key, Mouse};
+use crate::terminal::{Terminal, Mode, Iter, Cell};
+use crate::terminal::{cursor, touched};
+use crate::overlay::Overlay;
 
 #[derive(Debug)]
 pub enum Interface {
@@ -150,7 +150,7 @@ impl Interface {
 
 	pub fn focus<O: Write>(&mut self, value: bool, output: O) -> error::Result<()> {
 		if let Interface::Terminal(ref mut terminal) = *self {
-			try!(terminal.focus(value, output));
+			terminal.focus(value, output)?;
 		}
 
 		Ok(())
@@ -159,10 +159,10 @@ impl Interface {
 	pub fn paste<O: Write>(&mut self, value: &[u8], output: O) -> error::Result<()> {
 		match *self {
 			Interface::Terminal(ref mut terminal) =>
-				try!(terminal.paste(value, output)),
+				terminal.paste(value, output)?,
 
 			Interface::Overlay(ref mut overlay) =>
-				try!(overlay.paste(value, output)),
+				overlay.paste(value, output)?,
 		}
 
 		Ok(())
@@ -175,7 +175,7 @@ impl Interface {
 
 		match *self {
 			Interface::Terminal(ref mut terminal) => {
-				try!(terminal.key(key, output));
+				terminal.key(key, output)?;
 				Ok((Vec::new().into_iter(), touched::Iter::empty()))
 			}
 
@@ -192,7 +192,7 @@ impl Interface {
 
 		match *self {
 			Interface::Terminal(ref mut terminal) => {
-				try!(terminal.mouse(mouse, output));
+				terminal.mouse(mouse, output)?;
 				Ok((Vec::new().into_iter(), touched::Iter::empty()))
 			}
 

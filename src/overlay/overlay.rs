@@ -24,20 +24,20 @@ use std::hash::BuildHasherDefault;
 use fnv::FnvHasher;
 
 use unicode_segmentation::UnicodeSegmentation;
-use error;
-use config::overlay as config;
-use style::{self, Style};
-use platform::Clipboard;
-use platform::key::{self, Key};
-use platform::mouse::{self, Mouse};
-use terminal::{Terminal, Cursor, Iter, Row};
-use terminal::touched::{self, Touched};
-use terminal::cell::{self, Cell};
-use terminal::cursor;
-use overlay::Status;
-use overlay::command::{self, Command};
-use overlay::hints::{Hint, Hints};
-use interface::Action;
+use crate::error;
+use crate::config::overlay as config;
+use crate::style::{self, Style};
+use crate::platform::Clipboard;
+use crate::platform::key::{self, Key};
+use crate::platform::mouse::{self, Mouse};
+use crate::terminal::{Terminal, Cursor, Iter, Row};
+use crate::terminal::touched::{self, Touched};
+use crate::terminal::cell::{self, Cell};
+use crate::terminal::cursor;
+use crate::overlay::Status;
+use crate::overlay::command::{self, Command};
+use crate::overlay::hints::{Hint, Hints};
+use crate::interface::Action;
 
 #[derive(Debug)]
 pub struct Overlay {
@@ -223,7 +223,7 @@ impl Overlay {
 	/// Convert the `Overlay` into its wrapped `Terminal`, writing any cached
 	/// input.
 	pub fn into_inner<W: Write>(mut self, output: W) -> error::Result<Terminal> {
-		try!(self.inner.input(self.cache, output));
+		self.inner.input(self.cache, output)?;
 		Ok(self.inner)
 	}
 
@@ -260,7 +260,7 @@ impl Overlay {
 
 	/// Handle key input.
 	pub fn key(&mut self, key: Key) -> (vec::IntoIter<Action>, touched::Iter) {
-		use platform::key::{Value, Button, Keypad};
+		use crate::platform::key::{Value, Button, Keypad};
 
 		fn is_boundary(ch: &str) -> bool {
 			!ch.chars().any(|c| c.is_alphabetic() || c.is_numeric())
@@ -1253,7 +1253,7 @@ impl Overlay {
 	///
 	/// TODO(meh): simplify this, if at all possible.
 	fn select(&mut self, before: (u32, u32), after: (u32, u32)) {
-		match *try!(return option self.selector.current.as_mut()) {
+		match * r#try!(return option self.selector.current.as_mut()) {
 			Selection::Normal { ref mut start, ref mut end } => {
 				// Cursor went down.
 				if before.1 > after.1 {

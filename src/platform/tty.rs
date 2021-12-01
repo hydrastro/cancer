@@ -25,7 +25,7 @@ use libc::{SIGCHLD, SIGHUP, SIGINT, SIGQUIT, SIGTERM, SIGALRM, SIG_DFL, TIOCSCTT
 use libc::{close, read, write, openpty, fork, setsid, dup2, signal, ioctl, getpwuid, getuid, execvp};
 use libc::{fcntl, F_GETFL, F_SETFL, O_NONBLOCK};
 
-use error::{self, Error};
+use crate::error::{self, Error};
 
 #[derive(Debug)]
 pub struct Tty {
@@ -149,7 +149,7 @@ impl Tty {
 					fcntl(input, F_SETFL, flags);
 				}
 
-				try!(return o_sender.send((&buffer[.. consumed]).to_vec()));
+				r#try!(return o_sender.send((&buffer[.. consumed]).to_vec()));
 			}
 		}).unwrap();
 

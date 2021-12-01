@@ -16,8 +16,8 @@
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::mem;
-use ffi::pango::*;
-use sys::pango::{Item, GlyphString};
+use crate::ffi::pango::*;
+use crate::sys::pango::{Item, GlyphString};
 
 #[derive(Debug)]
 pub struct GlyphItem(pub PangoGlyphItem);

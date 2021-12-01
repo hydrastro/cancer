@@ -18,8 +18,8 @@
 use std::rc::Rc;
 use std::collections::{VecDeque, LinkedList};
 
-use terminal::{Cell, Row};
-use style::Style;
+use crate::terminal::{Cell, Row};
+use crate::style::Style;
 
 /// Wrapper for `Row` reuse.
 #[derive(Debug)]

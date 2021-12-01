@@ -19,11 +19,11 @@ use std::ops::Deref;
 use std::ptr;
 
 use libc::c_int;
-use ffi::pango::*;
-use sys::glib;
-use sys::pango;
-use style;
-use error::{self, Error};
+use crate::ffi::pango::*;
+use crate::sys::glib;
+use crate::sys::pango;
+use crate::style;
+use crate::error::{self, Error};
 
 /// The font to use for rendering.
 #[derive(Debug)]

@@ -16,7 +16,7 @@
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
 use picto::color::Rgba;
-use style;
+use crate::style;
 
 pub fn is_color(arg: &str) -> bool {
 	arg.starts_with('#') &&

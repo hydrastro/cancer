@@ -19,13 +19,13 @@ use std::sync::Arc;
 use std::ops::Deref;
 
 use picto::Region;
-use sys::cairo;
-use config::Config;
-use font::Font;
-use renderer::{State, Margin};
-use renderer::{option, Options};
-use renderer::{standard, ligatures};
-use interface::Interface;
+use crate::sys::cairo;
+use crate::config::Config;
+use crate::font::Font;
+use crate::renderer::{State, Margin};
+use crate::renderer::{option, Options};
+use crate::renderer::{standard, ligatures};
+use crate::interface::Interface;
 
 pub struct Renderer {
 	state: State,

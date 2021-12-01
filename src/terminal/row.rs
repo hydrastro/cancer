@@ -18,7 +18,7 @@
 use std::collections::VecDeque;
 use std::ops::{Deref, DerefMut};
 
-use terminal::Cell;
+use crate::terminal::Cell;
 
 /// A row within the view or scroll back.
 #[derive(PartialEq, Clone, Debug)]

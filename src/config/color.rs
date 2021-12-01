@@ -22,7 +22,7 @@ use fnv::FnvHasher;
 use toml;
 use picto::color::Rgba;
 
-use config::util::to_color;
+use crate::config::util::to_color;
 
 #[derive(PartialEq, Clone, Debug)]
 pub struct Color {

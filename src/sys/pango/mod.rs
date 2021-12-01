@@ -15,9 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use ffi::pango::PangoWeight as Weight;
-pub use ffi::pango::PangoStyle as Style;
-pub use ffi::pango::PangoUnderline as Underline;
+pub use crate::ffi::pango::PangoWeight as Weight;
+pub use crate::ffi::pango::PangoStyle as Style;
+pub use crate::ffi::pango::PangoUnderline as Underline;
 
 mod font;
 pub use self::font::Font;

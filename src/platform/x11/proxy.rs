@@ -22,10 +22,10 @@ use std::process::Command;
 use xcb;
 use xcbu::ewmh;
 
-use sys::cairo;
-use error;
-use platform::{self, Clipboard};
-use platform::x11::Request;
+use crate::sys::cairo;
+use crate::error;
+use crate::platform::{self, Clipboard};
+use crate::platform::x11::Request;
 
 pub struct Proxy {
 	pub(super) request:    Sender<Request>,

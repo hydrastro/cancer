@@ -22,7 +22,7 @@ use std::path::Path;
 use toml;
 use app_dirs::{AppInfo, AppDataType, app_root};
 
-use error;
+use crate::error;
 
 pub mod util;
 

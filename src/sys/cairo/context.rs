@@ -18,9 +18,9 @@
 use std::mem;
 
 use libc::c_int;
-use ffi::cairo::*;
-use ffi::pango::*;
-use sys::pango;
+use crate::ffi::cairo::*;
+use crate::ffi::pango::*;
+use crate::sys::pango;
 use picto::color::{Rgb, Rgba};
 use super::{Surface, Image, Operator};
 

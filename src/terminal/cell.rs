@@ -21,8 +21,8 @@ use std::rc::Rc;
 use unicode_width::UnicodeWidthStr;
 use tendril::StrTendril;
 
-use style::Style;
-use sys::cairo;
+use crate::style::Style;
+use crate::sys::cairo;
 
 #[derive(PartialEq, Clone, Debug)]
 pub enum Cell {

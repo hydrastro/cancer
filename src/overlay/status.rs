@@ -19,8 +19,8 @@ use std::rc::Rc;
 use std::ops::Deref;
 use unicode_segmentation::UnicodeSegmentation;
 
-use style::Style;
-use terminal::Cell;
+use crate::style::Style;
+use crate::terminal::Cell;
 
 /// Status bar.
 #[derive(Debug)]

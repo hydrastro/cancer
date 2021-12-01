@@ -16,7 +16,7 @@
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
 use picto::Region;
-use platform::{Key, Mouse};
+use crate::platform::{Key, Mouse};
 
 #[allow(dead_code)]
 #[derive(Eq, PartialEq, Clone, Debug)]

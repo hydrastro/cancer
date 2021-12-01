@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
-use platform::key;
+use crate::platform::key;
 
 #[derive(Eq, PartialEq, Copy, Clone, Debug)]
 pub enum Mouse {

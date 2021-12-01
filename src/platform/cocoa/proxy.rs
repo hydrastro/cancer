@@ -26,11 +26,11 @@ use cocoa::foundation::{NSString, NSSize, NSArray};
 use cocoa::appkit::{NSWindow, NSView, NSSound, NSPasteboard, NSPasteboardTypeString};
 use cocoa::base::{class, nil};
 
-use sys::cairo;
-use error;
-use platform::{self, Clipboard, Event};
-use platform::cocoa::IdRef;
-use config::Config;
+use crate::sys::cairo;
+use crate::error;
+use crate::platform::{self, Clipboard, Event};
+use crate::platform::cocoa::IdRef;
+use crate::config::Config;
 
 #[derive(Debug)]
 pub struct Proxy {

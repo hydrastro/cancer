@@ -16,7 +16,7 @@
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::ffi::CString;
-use ffi::pango::*;
+use crate::ffi::pango::*;
 
 use super::{Weight, Style};
 

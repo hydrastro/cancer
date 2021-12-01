@@ -22,11 +22,11 @@ use std::convert::TryFrom;
 use std::i32;
 
 use picto::color::Rgba;
-use style::Style;
-use config::Config;
-use config::style::Shape;
-use control::DEC;
-use terminal::cell;
+use crate::style::Style;
+use crate::config::Config;
+use crate::config::style::Shape;
+use crate::control::DEC;
+use crate::terminal::cell;
 
 #[derive(PartialEq, Clone, Debug)]
 pub struct Cursor {

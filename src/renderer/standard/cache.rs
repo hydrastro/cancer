@@ -17,9 +17,9 @@
 
 use std::rc::Rc;
 
-use style::{self, Style};
-use terminal::cell;
-use renderer::Options;
+use crate::style::{self, Style};
+use crate::terminal::cell;
+use crate::renderer::Options;
 
 /// Cache for cells to avoid rendering a cell multiple times when it's not
 /// needed.

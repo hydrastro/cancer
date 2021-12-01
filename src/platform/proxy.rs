@@ -17,9 +17,9 @@
 
 use std::sync::mpsc::Sender;
 
-use sys::cairo;
-use error;
-use platform::{Event, Clipboard};
+use crate::sys::cairo;
+use crate::error;
+use crate::platform::{Event, Clipboard};
 
 #[allow(unused_variables)]
 pub trait Proxy: Send {

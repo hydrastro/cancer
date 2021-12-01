@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
-macro_rules! try {
+macro_rules! r#try {
 	(return option $body:expr) => (
 		if let Some(value) = $body {
 			value

@@ -21,9 +21,9 @@ use fnv::FnvHasher;
 
 use toml;
 use regex::Regex;
-use config::util::{to_color, to_attributes};
-use config::style::{Cursor, Shape};
-use style::{self, Style};
+use crate::config::util::{to_color, to_attributes};
+use crate::config::style::{Cursor, Shape};
+use crate::style::{self, Style};
 
 #[derive(Clone, Debug)]
 pub struct Overlay {
@@ -190,8 +190,8 @@ impl Overlay {
 			}
 
 			for (name, table) in table {
-				let id    = try!(continue name.parse());
-				let table = try!(continue option table.as_table());
+				let id    = r#try!(continue name.parse());
+				let table = r#try!(continue option table.as_table());
 
 				if id == 0 {
 					continue;

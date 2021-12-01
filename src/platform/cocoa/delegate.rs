@@ -23,8 +23,8 @@ use objc::declare::ClassDecl;
 use cocoa::base::{id, nil};
 use cocoa::appkit::{NSWindow, NSView};
 
-use platform::cocoa::IdRef;
-use platform::Event;
+use crate::platform::cocoa::IdRef;
+use crate::platform::Event;
 
 #[derive(Debug)]
 pub struct Delegate {

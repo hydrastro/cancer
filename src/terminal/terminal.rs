@@ -28,19 +28,19 @@ use unicode_width::UnicodeWidthStr;
 use picto::Region;
 use picto::color::Rgba;
 use control::{self, Control, C0, C1, DEC, CSI, SGR};
-use util;
-use error;
-use config::{self, Config};
-use config::style::Shape;
-use style::{self, Style};
-use platform::key::{self, Key};
-use platform::mouse::{self, Mouse};
-use terminal::{Iter, Touched, Cell, Tabs, Grid, Sixel, cell};
-use terminal::mode::{self, Mode};
-use terminal::cursor::{self, Cursor};
-use terminal::touched;
-use terminal::input::{self, Input};
-use interface::Action;
+use crate::util;
+use crate::error;
+use crate::config::{self, Config};
+use crate::config::style::Shape;
+use crate::style::{self, Style};
+use crate::platform::key::{self, Key};
+use crate::platform::mouse::{self, Mouse};
+use crate::terminal::{Iter, Touched, Cell, Tabs, Grid, Sixel, cell};
+use crate::terminal::mode::{self, Mode};
+use crate::terminal::cursor::{self, Cursor};
+use crate::terminal::touched;
+use crate::terminal::input::{self, Input};
+use crate::interface::Action;
 
 #[derive(Debug)]
 pub struct Terminal {
@@ -262,12 +262,12 @@ impl Terminal {
 	/// Send focus events.
 	pub fn focus<O: Write>(&mut self, value: bool, mut output: O) -> io::Result<()> {
 		if self.mode.contains(mode::FOCUS) {
-			try!(output.write_all(if value {
+			output.write_all(if value {
 				b"\x1B[I"
 			}
 			else {
 				b"\x1B[O"
-			}));
+			})?;
 		}
 
 		Ok(())
@@ -276,13 +276,13 @@ impl Terminal {
 	/// Paste something to the terminal.
 	pub fn paste<O: Write>(&mut self, value: &[u8], mut output: O) -> io::Result<()> {
 		if self.mode.contains(mode::BRACKETED_PASTE) {
-			try!(output.write_all(b"\x1B[200~"));
+			output.write_all(b"\x1B[200~")?;
 		}
 
-		try!(output.write_all(value));
+		output.write_all(value)?;
 
 		if self.mode.contains(mode::BRACKETED_PASTE) {
-			try!(output.write_all(b"\x1B[201~"));
+			output.write_all(b"\x1B[201~")?;
 		}
 
 		Ok(())
@@ -290,7 +290,7 @@ impl Terminal {
 
 	/// Handle a key.
 	pub fn key<O: Write>(&mut self, key: Key, mut output: O) -> io::Result<()> {
-		use platform::key::{Value, Button, Keypad};
+		use crate::platform::key::{Value, Button, Keypad};
 
 		macro_rules! write {
 			() => ();
@@ -333,7 +333,7 @@ impl Terminal {
 		match *key.value() {
 			Value::Char(ref string) => {
 				if key.modifier().contains(key::ALT) {
-					try!(output.write_all(b"\x1B"));
+					output.write_all(b"\x1B")?;
 				}
 
 				if key.modifier().contains(key::CTRL) && string.len() == 1 {
@@ -746,18 +746,18 @@ impl Terminal {
 		}
 
 		if self.mode.contains(mode::MOUSE_SGR) {
-			try!(write!(output, "\x1B[<{button};{x};{y}{mode}",
+			write!(output, "\x1B[<{button};{x};{y}{mode}",
 				mode   = if click.press { 'M' } else { 'm' },
 				button = button,
 				x      = click.position.x + 1,
-				y      = click.position.y + 1));
+				y      = click.position.y + 1)?;
 		}
 		else if click.position.x < 223 && click.position.y < 223 {
-			try!(output.write_all(b"\x1B[M"));
-			try!(output.write_all(&[
+			output.write_all(b"\x1B[M")?;
+			output.write_all(&[
 				32 + button,
 				32 + click.position.x as u8 + 1,
-				32 + click.position.y as u8 + 1]));
+				32 + click.position.y as u8 + 1])?;
 		}
 
 		Ok(())
@@ -986,12 +986,12 @@ impl Terminal {
 		match control {
 			// Attributes.
 			Control::C1(C1::ControlSequence(CSI::DeviceAttributes(0))) => {
-				try!(output.write_all(b"\033[?64;6;21c"));
+				output.write_all(b"\033[?64;6;21c")?;
 			}
 
 			Control::C1(C1::ControlSequence(CSI::DeviceStatusReport(CSI::Report::CursorPosition))) => {
-				try!(control::format_to(output.by_ref(),
-					&CSI::CursorPositionReport { x: self.cursor.x(), y: self.cursor.y() }));
+				control::format_to(output.by_ref(),
+					&CSI::CursorPositionReport { x: self.cursor.x(), y: self.cursor.y() })?;
 			}
 
 			Control::DEC(DEC::Unicode(value)) => {

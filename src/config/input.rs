@@ -16,7 +16,7 @@
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
 use toml;
-use platform::{Key, key};
+use crate::platform::{Key, key};
 
 #[derive(PartialEq, Clone, Debug)]
 pub struct Input {

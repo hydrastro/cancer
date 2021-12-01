@@ -33,10 +33,10 @@
 // along with cancer.  If not, see <http://www.gnu.org/licenses/>.
 
 use picto::Region;
-use sys::cairo;
-use interface::Interface;
-use renderer::State;
-use renderer::option::{self, Options};
+use crate::sys::cairo;
+use crate::interface::Interface;
+use crate::renderer::State;
+use crate::renderer::option::{self, Options};
 
 /// Renderer for a `cairo::Surface`.
 pub struct Renderer {

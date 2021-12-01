@@ -22,8 +22,8 @@ use xcb;
 use xcbu::ewmh;
 use xkb;
 
-use error;
-use platform::key::{self, Key, Button, Keypad, Modifier, Lock};
+use crate::error;
+use crate::platform::key::{self, Key, Button, Keypad, Modifier, Lock};
 
 pub struct Keyboard {
 	connection: Arc<ewmh::Connection>,
@@ -180,7 +180,7 @@ impl Keyboard {
 				lock
 			});
 
-		let symbol = try!(option self.symbol(code));
+		let symbol = r#try!(option self.symbol(code));
 		self.compose.feed(symbol);
 
 		debug!(target: "cancer::platform::key", "compose status: {:?}", self.compose.status());
@@ -350,7 +350,7 @@ impl Keyboard {
 				String::from(if modifier.contains(key::CTRL) { "@" } else { " " }).into(),
 
 			_ => {
-				let mut string = try!(option self.string(code));
+				let mut string = r#try!(option self.string(code));
 
 				// Convert from the control code representation to the real letter.
 				if modifier.contains(key::CTRL) && string.len() == 1 {
